@@ -1,11 +1,6 @@
-# app/agent.py
 
 from typing import List, Dict, Optional
 
-
-# =========================
-# 🔹 JD ANALYZER (AGENT THINKING STAGE 1)
-# =========================
 def analyze_jd(jd_text: str,
                required_skills: List[str],
                required_years: Optional[float]) -> Dict:
@@ -15,16 +10,15 @@ def analyze_jd(jd_text: str,
     issues = []
     questions = []
 
-    # Check if JD is too short
+    
     if not jd_text or len(jd_text.strip()) < 30:
         issues.append("Job description is very short. Add more context about responsibilities and required skills.")
 
-    # Check if skills missing
+    
     if not required_skills or all(not s.strip() for s in required_skills):
         issues.append("Required skills are missing or empty.")
         questions.append("What are the must-have skills for this role? (3–5 keywords)")
 
-    # Check experience requirement
     if not required_years or required_years <= 0:
         issues.append("Required experience not specified.")
         questions.append("How many years of experience is expected?")
@@ -35,9 +29,7 @@ def analyze_jd(jd_text: str,
     }
 
 
-# =========================
-# 🔹 CANDIDATE CLASSIFICATION (AGENT THINKING STAGE 2)
-# =========================
+
 def classify_candidates(candidates: List[Dict],
                         threshold_strong: float = 75.0,
                         threshold_borderline: float = 55.0) -> Dict:

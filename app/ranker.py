@@ -33,5 +33,5 @@ def score_candidates(cands, jd_text, jd_emb, req_skills, req_years, weights):
         c["final_score"] = final
     return cands
 
-# Avoid circular import
+
 from embedder import get_embedding as get_embedding_wrapper
