@@ -1,10 +1,14 @@
- # app/parser.py
+# app/parser.py
 
 import re
 import os
 from typing import Dict
 
-# Try to import pdfminer, but don't crash if it's missing
+# ------------------------
+# Optional imports
+# ------------------------
+
+# Try pdfminer
 try:
     import pdfminer.high_level as pdf_high_level
     HAS_PDFMINER = True
@@ -12,7 +16,14 @@ except ImportError:
     pdf_high_level = None
     HAS_PDFMINER = False
 
-from docx import Document
+# Try python-docx
+try:
+    from docx import Document
+    HAS_DOCX = True
+except ImportError:
+    Document = None
+    HAS_DOCX = False
+
 from utils import extract_skills_from_text
 
 
@@ -24,7 +35,6 @@ def extract_text_from_pdf(bytes_data: bytes) -> str:
     """Extract text from a PDF file if pdfminer is available."""
     if not HAS_PDFMINER:
         # No pdfminer in this environment (e.g. Streamlit Cloud)
-        # Return empty text; we'll handle this gracefully in parse_resume
         return ""
 
     temp_path = "temp.pdf"
@@ -43,7 +53,11 @@ def extract_text_from_pdf(bytes_data: bytes) -> str:
 
 
 def extract_text_from_docx(bytes_data: bytes) -> str:
-    """Extract text from a DOCX file."""
+    """Extract text from a DOCX file if python-docx is available."""
+    if not HAS_DOCX:
+        # No python-docx in this environment
+        return ""
+
     temp_path = "temp.docx"
     with open(temp_path, "wb") as f:
         f.write(bytes_data)
@@ -99,8 +113,6 @@ def parse_resume(uploaded_file) -> Dict:
     # Detect extension
     if file_name_lower.endswith(".pdf"):
         text = extract_text_from_pdf(raw)
-
-        # If we couldn't parse PDF because pdfminer is missing
         if not text and not HAS_PDFMINER:
             text = (
                 "PDF parsing is not available in this deployment. "
@@ -109,12 +121,16 @@ def parse_resume(uploaded_file) -> Dict:
 
     elif file_name_lower.endswith(".docx"):
         text = extract_text_from_docx(raw)
+        if not text and not HAS_DOCX:
+            text = (
+                "DOCX parsing is not available in this deployment. "
+                "Please upload a TXT version of the resume."
+            )
 
     elif file_name_lower.endswith(".txt"):
         text = extract_text_from_txt(raw)
 
     else:
-        # Unsupported type, but still return a consistent structure
         text = f"Unsupported file type: {file_name}. Upload PDF, DOCX, or TXT."
 
     # Extract email
@@ -134,6 +150,3 @@ def parse_resume(uploaded_file) -> Dict:
         "skills": skills,
         "total_experience": exp,
     }
-
-
-
