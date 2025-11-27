@@ -45,6 +45,7 @@ desktop.ini
 *.csv
 *.xlsx
 *.txt
+!requirements.txt
 *.pdf
 
 # Private API Keys or Secrets
