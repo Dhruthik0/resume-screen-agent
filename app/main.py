@@ -32,7 +32,7 @@ if "role_title" not in st.session_state:
 
 
 
-st.subheader("1️⃣ Job Description & Criteria")
+st.subheader("Job Description & Criteria")
 
 jd_text = st.text_area("Paste Job Description", height=200)
 
@@ -42,7 +42,7 @@ with col1:
 with col2:
     required_years = st.number_input("Required Years of Experience (optional)", 0, 50, value=0)
 
-st.subheader("2️⃣ Upload Resumes")
+st.subheader(" Upload Resumes")
 uploaded_files = st.file_uploader(
     "Upload resumes (PDF / DOCX / TXT)",
     type=["pdf", "docx", "txt"],
@@ -50,7 +50,7 @@ uploaded_files = st.file_uploader(
 )
 
 
-st.subheader("3️⃣ Agent Thresholds (Optional)")
+st.subheader("Agent Thresholds (Optional)")
 col_thr1, col_thr2 = st.columns(2)
 with col_thr1:
     strong_threshold = st.slider("Strong match threshold", 0.0, 100.0, 75.0)
@@ -59,7 +59,7 @@ with col_thr2:
 
 
 
-if st.button("🚀 Run Screening Agent"):
+if st.button("Run Agent"):
     if not jd_text or not uploaded_files:
         st.warning("⚠ Please provide both a Job Description and at least one resume.")
         st.stop()
@@ -74,17 +74,17 @@ if st.button("🚀 Run Screening Agent"):
 
     
     candidates = []
-    st.info("📄 Parsing resumes...")
+    st.info(" Parsing resumes...")
     for f in uploaded_files:
         cand = parse_resume(f)
         candidates.append(cand)
 
     
-    st.info("🔢 Embedding Job Description (local model, no API key)...")
+    st.info("Embedding Job Description (local model, no API key)...")
     jd_emb = get_embedding(jd_text)
 
     
-    st.info("📊 Scoring candidates...")
+    st.info("Scoring candidates...")
     results = score_candidates(
         candidates,
         jd_text,
