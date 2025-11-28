@@ -1,7 +1,4 @@
 def get_explanation(jd, candidate, score):
-    """
-    Simple rule-based explanation (no LLM).
-    """
     name = candidate.get("name") or candidate.get("file_name") or "Candidate"
     skills = candidate.get("skills", [])
     exp = candidate.get("total_experience")
@@ -19,9 +16,6 @@ def get_explanation(jd, candidate, score):
 
 
 def get_questions(jd, candidate):
-    """
-    Simple generic questions (no LLM).
-    """
     return (
         "- Can you walk me through a recent project that closely matches this job description?\n"
         "- Which of your skills do you think are the strongest fit for this role, and why?\n"

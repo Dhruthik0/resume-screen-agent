@@ -1,20 +1,14 @@
-
 from typing import List, Dict, Optional
 
 def analyze_jd(jd_text: str,
                required_skills: List[str],
                required_years: Optional[float]) -> Dict:
-    """
-    Agent checks JD quality & missing info
-    """
     issues = []
     questions = []
 
-    
     if not jd_text or len(jd_text.strip()) < 30:
         issues.append("Job description is very short. Add more context about responsibilities and required skills.")
 
-    
     if not required_skills or all(not s.strip() for s in required_skills):
         issues.append("Required skills are missing or empty.")
         questions.append("What are the must-have skills for this role? (3–5 keywords)")
@@ -28,8 +22,6 @@ def analyze_jd(jd_text: str,
         "questions": questions
     }
 
-
-
 def classify_candidates(candidates: List[Dict],
                         threshold_strong: float = 75.0,
                         threshold_borderline: float = 55.0) -> Dict:
@@ -41,10 +33,8 @@ def classify_candidates(candidates: List[Dict],
 
         if score >= threshold_strong:
             strong.append(c)
-
         elif score >= threshold_borderline:
             borderline.append(c)
-
         else:
             weak.append(c)
 
@@ -54,10 +44,6 @@ def classify_candidates(candidates: List[Dict],
         "weak": weak
     }
 
-
-# =========================
-# 🔹 AGENT DECISION SUMMARY
-# =========================
 def agent_recommendation(classified: Dict) -> str:
     strong = classified["strong"]
     borderline = classified["borderline"]
@@ -77,21 +63,15 @@ def agent_recommendation(classified: Dict) -> str:
 
     if len(strong) == 0 and len(borderline) > 0:
         msg.append("No strong matches — consider reviewing borderline candidates manually.")
-
     elif len(strong) > 0:
         names = [c.get('file_name', 'Candidate') for c in strong][:3]
         msg.append(f"Recommended next step → Shortlist {len(strong)} strong candidates.")
         msg.append(f"Top picks: {', '.join(names)}")
-
     else:
         msg.append("No suitable profiles. Suggest widening search or updating JD.")
 
     return " ".join(msg)
 
-
-# =========================
-# 🔹 HR EMAIL DRAFT GENERATOR
-# =========================
 def make_hr_email_draft(role_title: str,
                         strong_candidates: List[Dict]) -> str:
 
