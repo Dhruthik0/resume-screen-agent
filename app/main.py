@@ -174,10 +174,10 @@ if st.session_state.has_run and st.session_state.sorted_results is not None:
         for r in sorted_results:
             score = r.get("final_score", 0)
             with st.expander(f"{r.get('file_name', 'Candidate')} — Score: {score:.1f}"):
-                st.write("**Final Score:**", f"{score:.1f}")
-                st.write("**Skills:**", ", ".join(r.get("skills", [])))
-                st.write("**Experience (years):**", r.get("total_experience"))
-                st.write("**Explanation:**")
+                st.write("Final Score:", f"{score:.1f}")
+                st.write("Skills:", ", ".join(r.get("skills", [])))
+                st.write("Experience (years):", r.get("total_experience"))
+                st.write("Explanation:")
                 st.write(r.get("explanation", ""))
 
         st.dataframe(df)
@@ -191,12 +191,12 @@ if st.session_state.has_run and st.session_state.sorted_results is not None:
         st.info("No candidates to display.")
 
     
-    st.subheader("🤖 Agent Decision")
+    st.subheader("Agent Decision")
     decision_text = agent_recommendation(classified)
     st.write(decision_text)
 
     if classified["strong"]:
-        st.markdown("**Strongly recommended candidates:**")
+        st.markdown("Strongly recommended candidates:")
         for c in classified["strong"]:
             st.write(
                 "-",

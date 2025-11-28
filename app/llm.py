@@ -11,7 +11,7 @@ def get_explanation(jd, candidate, score):
     if exp is not None:
         parts.append(f"Reported experience: {exp} years.")
 
-    parts.append("This is a heuristic explanation generated without an LLM.")
+    # parts.append("This is a heuristic explanation generated without an LLM.")
     return " ".join(parts)
 
 
